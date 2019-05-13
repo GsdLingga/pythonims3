@@ -15,19 +15,30 @@ def main():
         cursorclass=pymysql.cursors.DictCursor
     )
 
+    mahasiswa = ""
+
     try:
         with mysqli.cursor() as cursor:
             # Read a single record
             sql = "SELECT * FROM tb_mhs"
             cursor.execute(sql)
             result = cursor.fetchall()
+
     finally:
         mysqli.close()
 
         if result is None:
             return "Tidak ada data yang ditemukan"
         else:
-            return render_template("index.html", result=result)
+            for data in result:
+                mahasiswa += str(data['id'])
+                mahasiswa += '\n'
+                mahasiswa += str(data['nim'])
+                mahasiswa += "\n"
+                mahasiswa += data['nama']
+                mahasiswa += "\n"
+
+            return render_template("index.html", result=mahasiswa)
 
 
 if __name__ == "__main__":
